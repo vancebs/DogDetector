@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import urllib2 as urllib2
 import re as re
 import Tkinter
@@ -5,9 +7,11 @@ import tkMessageBox
 from threading import Timer
 
 URL_HOST = 'http://www.wolai66.com'
-URL_SEARCH = ('/search_results?key=\xe4\xba\xac\xe4\xb8\x9cE\xe5\x8d\xa1',
-              '/search_results?key=\xe5\xa4\xa9\xe7\x8b\x97\xe8\xb4\xad\xe7\x89\xa9\xe5\x8d\xa1')
-UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11'
+URL_SEARCH = ('/search_results?key=京东E卡',
+              '/search_results?key=天狗购物卡')
+UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0)' \
+            ' AppleWebKit/535.11 (KHTML, like Gecko)' \
+            ' Chrome/17.0.963.56 Safari/535.11'
 DETECT_FREQUENCY = 3600  # 1 hour
 
 
@@ -49,7 +53,8 @@ def fetch_dog_list():
 def fetch_dog_detail(item):
     data = http_get(item['url'])
     pattern_detail = re.compile(
-        '[\s\S]*?id\s*=\s*"current_prov_sku_price"[^>]*?value\s*=\s*"([.\d]+?)"\s+/>[\s\S]*?id\s*=\s*"current_pro_inventory_quantity"[^>]*?value\s*=\s*"(\d+?)"\s*/>[\s\S]*?')
+        '[\s\S]*?id\s*=\s*"current_prov_sku_price"[^>]*?value\s*=\s*"([.\d]+?)"\s+/>'
+        '[\s\S]*?id\s*=\s*"current_pro_inventory_quantity"[^>]*?value\s*=\s*"(\d+?)"\s*/>[\s\S]*?')
     result = pattern_detail.match(data)
     item['price'] = float(result.group(1))
     item['count'] = int(result.group(2))
@@ -59,11 +64,11 @@ def fetch_dog_detail(item):
 def show_dog_detected_msg(msg):
     top = Tkinter.Tk()
     top.withdraw()  # hide window
-    tkMessageBox.showinfo('Dog detected!', msg)
+    tkMessageBox.showinfo('Dog found!', msg)
 
 
 def get_item_string(item):
-    return u'{0} [\xa5{2}]: {1} '.format(unicode(item['name'], 'utf8'), item['count'], item['price'])
+    return '{0} [￥{2}]: {1} '.format(item['name'], item['count'], item['price'])
 
 
 def detect_dog():
@@ -79,17 +84,17 @@ def detect_dog():
             detected = True
 
         # add item string
-        str_items.append(get_item_string(i))
+        str_item = get_item_string(i)
+        str_items.append(str_item)
+        print(unicode(str_item, 'utf-8'))
 
     # notify
     msg = '\n'.join(str_items)
     if detected:
-        print ('====> Detected!')
-        print (msg)
+        print ('====> Hurry up! Catch the dog!!!')
         show_dog_detected_msg(msg)
     else:
-        print ('====> Not detected!')
-        print (msg)
+        print ('====> No dog found, wash wash sleep...')
 
 
 def main():
