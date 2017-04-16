@@ -6,12 +6,23 @@ import Tkinter
 import tkMessageBox
 from threading import Timer
 
+# host of the website
 URL_HOST = 'http://www.wolai66.com'
+
+# url for search. script will parser list from the search list
 URL_SEARCH = ('/search_results?key=京东E卡',
               '/search_results?key=天狗购物卡')
+
+# Extra url of items to detect
+URL_EXTRA_ITEM = ('/commodity?code=10171476858',  # 企业专属JD卡（电子）
+                  )
+
+# User Agent
 UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0)' \
             ' AppleWebKit/535.11 (KHTML, like Gecko)' \
             ' Chrome/17.0.963.56 Safari/535.11'
+
+# frequency
 DETECT_FREQUENCY = 3600  # 1 hour
 
 
@@ -29,7 +40,7 @@ def fetch_dog_list():
     pattern_area = re.compile(
         '[\s\S]*?<div\s+class="search_result_items"\s*>([\s\S]*?)<script>\s*function fn_page_turning[\s\S]*?')
     pattern_item = re.compile(
-        '[\s\S]*?<p class="desc">\s*<a\s+href\s*=\s*"(.+?)"\s+target\s*=\s*"_blank"\s*>(.+?)</a>\s*</p>')
+        '[\s\S]*?<p class="desc">\s*<a\s+href\s*=\s*"(.+?)"')
     items = []
 
     for url in URL_SEARCH:
@@ -45,7 +56,11 @@ def fetch_dog_list():
 
         # make result for return
         for item in result:
-            items.append({'url': item[0], 'name': item[1]})
+            items.append({'url': item})
+
+        # append extra item list
+        for item in URL_EXTRA_ITEM:
+            items.append({'url': item})
 
     return items
 
@@ -54,10 +69,13 @@ def fetch_dog_detail(item):
     data = http_get(item['url'])
     pattern_detail = re.compile(
         '[\s\S]*?id\s*=\s*"current_prov_sku_price"[^>]*?value\s*=\s*"([.\d]+?)"\s+/>'
-        '[\s\S]*?id\s*=\s*"current_pro_inventory_quantity"[^>]*?value\s*=\s*"(\d+?)"\s*/>[\s\S]*?')
+        '[\s\S]*?id\s*=\s*"current_pro_inventory_quantity"[^>]*?value\s*=\s*"(\d+?)"\s*/>'
+        '[\s\S]*?class\s*=\s*"tb_title">\s*<h3>\s*(.*?)\s*</h3>'
+        '[\s\S]*?')
     result = pattern_detail.match(data)
     item['price'] = float(result.group(1))
     item['count'] = int(result.group(2))
+    item['name'] = result.group(3)
     return item
 
 
