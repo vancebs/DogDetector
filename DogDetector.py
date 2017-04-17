@@ -58,9 +58,9 @@ def fetch_dog_list():
         for item in result:
             items.append({'url': item})
 
-        # append extra item list
-        for item in URL_EXTRA_ITEM:
-            items.append({'url': item})
+    # append extra item list
+    for item in URL_EXTRA_ITEM:
+        items.append({'url': item})
 
     return items
 
