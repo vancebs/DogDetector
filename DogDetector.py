@@ -5,6 +5,8 @@ import re as re
 import Tkinter
 import tkMessageBox
 from threading import Timer
+import smtplib
+from email.mime.text import MIMEText
 
 # host of the website
 URL_HOST = 'http://www.wolai66.com'
@@ -15,7 +17,7 @@ URL_SEARCH = ('/search_results?key=京东E卡',
 
 # Extra url of items to detect
 URL_EXTRA_ITEM = ('/commodity?code=10171476858',  # 企业专属JD卡（电子）
-                  )
+                  '/commodity?code=17206586167')  # 100 兑 100
 
 # User Agent
 UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0)' \
@@ -23,7 +25,17 @@ UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0)' \
             ' Chrome/17.0.963.56 Safari/535.11'
 
 # frequency
-DETECT_FREQUENCY = 3600  # 1 hour
+DETECT_FREQUENCY = 1200  # 20 minutes
+
+# mail
+MAIL_HOST = 'smtp.zoho.com.cn'  # 设置服务器
+MAIL_PORT = 465
+MAIL_USER = 'dog_detector@zoho.com.cn'  # 用户名
+MAIL_PASS = 'dogdogdog'      # 口令
+MAIL_POSTFIX = 'zoho.com.cn'  # 发件箱的后缀
+MAIL_FROM = 'dog_detector@zoho.com.cn'
+MAIL_TO = ['fan.hu@t2mobile.com',
+           'qiang.liu@tcl.com']
 
 
 def get_url(path):
@@ -89,6 +101,25 @@ def get_item_string(item):
     return '{0} [￥{2}]: {1} '.format(item['name'], item['count'], item['price'])
 
 
+def send_dog_detected_email(msg):
+    msg = MIMEText(msg, _subtype='plain', _charset='gb2312')
+    msg['Subject'] = 'Dog detected! Go and catch them!!'
+    msg['From'] = MAIL_FROM
+    msg['To'] = ';'.join(MAIL_TO)
+    try:
+        server = smtplib.SMTP_SSL(host=MAIL_HOST, port=MAIL_PORT)
+        server.login(MAIL_USER, MAIL_PASS)
+        server.sendmail(MAIL_FROM, MAIL_TO, msg.as_string())
+        server.close()
+    except Exception, e:
+        print str(e)
+
+
+def on_dog_detected(msg):
+    # show_dog_detected_msg(msg)
+    send_dog_detected_email(msg)
+
+
 def detect_dog():
     print ('Fetch item list ...')
     dog_list = fetch_dog_list()
@@ -110,7 +141,7 @@ def detect_dog():
     msg = '\n'.join(str_items)
     if detected:
         print ('====> Hurry up! Catch the dog!!!')
-        show_dog_detected_msg(msg)
+        on_dog_detected(msg)
     else:
         print ('====> No dog found, wash wash sleep...')
 
