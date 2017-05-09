@@ -25,7 +25,7 @@ UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0)' \
             ' Chrome/17.0.963.56 Safari/535.11'
 
 # frequency
-DETECT_FREQUENCY = 1200  # 20 minutes
+DETECT_FREQUENCY = 600  # 10 minutes
 
 # mail
 MAIL_HOST = 'smtp.zoho.com.cn'  # 设置服务器
