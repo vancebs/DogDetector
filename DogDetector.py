@@ -122,7 +122,6 @@ def send_dog_detected_email(dog_list):
         # add item string
         str_item = get_item_email_string(item)
         str_items.append(str_item)
-        print(unicode(str_item, 'utf-8'))
 
     # generate message
     msg = '\n'.join(str_items)
@@ -155,6 +154,7 @@ def detect_dog():
     for item in dog_list:
         if fetch_dog_detail(item)['count'] > 0:
             detected = True
+        print(unicode(get_item_string(item), 'utf-8'))
 
     # notify
     if detected:
