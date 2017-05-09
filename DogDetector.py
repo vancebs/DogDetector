@@ -91,7 +91,17 @@ def fetch_dog_detail(item):
     return item
 
 
-def show_dog_detected_msg(msg):
+def show_dog_detected_msg(dog_list):
+    str_items = []
+    for item in dog_list:
+        # add item string
+        str_item = get_item_string(item)
+        str_items.append(str_item)
+        print(unicode(str_item, 'utf-8'))
+
+    # generate message
+    msg = '\n'.join(str_items)
+
     top = Tkinter.Tk()
     top.withdraw()  # hide window
     tkMessageBox.showinfo('Dog found!', msg)
@@ -101,8 +111,23 @@ def get_item_string(item):
     return '{0} [￥{2}]: {1} '.format(item['name'], item['count'], item['price'])
 
 
-def send_dog_detected_email(msg):
-    msg = MIMEText(msg, _subtype='plain', _charset='gb2312')
+def get_item_email_string(item):
+    return '<div><a href="{0}{1}">{2}</a> [￥{4}]: {3}</div>'.format(URL_HOST, item['url'], item['name'], item['count'], item['price'])
+
+
+def send_dog_detected_email(dog_list):
+    str_items = []
+    for item in dog_list:
+        # add item string
+        str_item = get_item_email_string(item)
+        str_items.append(str_item)
+        print(unicode(str_item, 'utf-8'))
+
+    # generate message
+    msg = '\n'.join(str_items)
+
+    # send email
+    msg = MIMEText(msg, _subtype='html', _charset='gb2312')
     msg['Subject'] = 'Dog detected! Go and catch them!!'
     msg['From'] = MAIL_FROM
     msg['To'] = ';'.join(MAIL_TO)
@@ -115,9 +140,9 @@ def send_dog_detected_email(msg):
         print str(e)
 
 
-def on_dog_detected(msg):
-    # show_dog_detected_msg(msg)
-    send_dog_detected_email(msg)
+def on_dog_detected(dog_list):
+    # show_dog_detected_msg(dog_list)
+    send_dog_detected_email(dog_list)
 
 
 def detect_dog():
@@ -126,25 +151,16 @@ def detect_dog():
 
     print ('Fetch item detail')
     detected = False
-    str_items = []
     for item in dog_list:
-        i = fetch_dog_detail(item)
-        if i['count'] > 0:
+        if fetch_dog_detail(item)['count'] > 0:
             detected = True
 
-        # add item string
-        str_item = get_item_string(i)
-        str_items.append(str_item)
-        print(unicode(str_item, 'utf-8'))
-
     # notify
-    msg = '\n'.join(str_items)
     if detected:
         print ('====> Hurry up! Catch the dog!!!')
-        on_dog_detected(msg)
+        on_dog_detected(dog_list)
     else:
         print ('====> No dog found, wash wash sleep...')
-
 
 def main():
     detect_dog()
