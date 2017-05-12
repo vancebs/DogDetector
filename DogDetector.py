@@ -36,7 +36,8 @@ MAIL_POSTFIX = 'zoho.com.cn'  # 发件箱的后缀
 MAIL_FROM = 'dog_detector@zoho.com.cn'
 MAIL_TO = ['fan.hu@t2mobile.com',
            'qiang.liu@tcl.com',
-           'luyan.ding@tcl.com']
+           'luyan.ding@tcl.com',
+           'huidan.chai@tcl.com']
 
 
 def get_url(path):
