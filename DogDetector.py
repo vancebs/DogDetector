@@ -19,6 +19,10 @@ URL_SEARCH = ('/search_results?key=京东E卡',
 URL_EXTRA_ITEM = ('/commodity?code=10171476858',  # 企业专属JD卡（电子）
                   '/commodity?code=17206586167')  # 100 兑 100
 
+# Except urls
+URL_EXCEPT_ITEM = ('/commodity?code=10173427204', # 京东E卡300元+哈根达斯100元
+                   )
+
 # User Agent
 UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0)' \
             ' AppleWebKit/535.11 (KHTML, like Gecko)' \
@@ -70,7 +74,8 @@ def fetch_dog_list():
 
         # make result for return
         for item in result:
-            items.append({'url': item})
+            if item not in URL_EXCEPT_ITEM:  # remove except urls
+                items.append({'url': item})
 
     # append extra item list
     for item in URL_EXTRA_ITEM:
