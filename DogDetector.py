@@ -169,11 +169,13 @@ def detect_dog():
     else:
         print ('====> No dog found, wash wash sleep...')
 
+
 def main():
     detect_dog()
 
     print ('Scheduler next detect after {0} seconds...'.format(DETECT_FREQUENCY))
     Timer(DETECT_FREQUENCY, main).start()
+
 
 if __name__ == "__main__":
     main()
