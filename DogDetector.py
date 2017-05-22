@@ -29,7 +29,7 @@ UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0)' \
             ' Chrome/17.0.963.56 Safari/535.11'
 
 # frequency
-DETECT_FREQUENCY = 600  # 10 minutes
+DETECT_FREQUENCY = 300  # 5 minutes
 
 # mail
 MAIL_HOST = 'smtp.zoho.com.cn'  # 设置服务器
@@ -42,7 +42,8 @@ MAIL_TO = ['fan.hu@t2mobile.com',
            'qiang.liu@tcl.com',
            'luyan.ding@tcl.com',
            'huidan.chai@tcl.com',
-           'panyue.xu@tcl.com']
+           'panyue.xu@tcl.com',
+           'ping.wang.nb@tcl.com']
 
 
 def get_url(path):
