@@ -45,7 +45,8 @@ MAIL_TO = ['fan.hu@t2mobile.com',
            'huidan.chai@tcl.com',
            'panyue.xu@tcl.com',
            'ping.wang.nb@tcl.com',
-           'jie.ding@tcl.com']
+           'jie.ding@tcl.com',
+           'yihong.zhang@tcl.com']
 
 
 def get_url(path):
