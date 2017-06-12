@@ -21,7 +21,8 @@ URL_EXTRA_ITEM = ('/commodity?code=10171476858',  # 企业专属JD卡（电子�
 
 # Except urls
 URL_EXCEPT_ITEM = ('/commodity?code=10173427204', # 京东E卡300元+哈根达斯100元
-                   )
+                   '/commodity?code=10145026088', # 京东E卡600元+哈根达斯100元*2
+                   '/commodity?code=10187411464') # 京东E卡1000元+哈根达斯100元*3
 
 # User Agent
 UA_CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0)' \
